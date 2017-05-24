@@ -32,21 +32,27 @@ Role Variables
 ### roles/chrome/defaults/main.yml
 
 ```yaml
-chrome_state             : present # absent, purged
-chrome_apt_key_state     : '{{ chrome_state }}'
-chrome_apt_repo_location : sources_list_d # sources_list # location of apt_sources entry
+---
+# defaults file for ansible-role-chrome
 
-# current repo
+chrome_state             : 'present'            # 'present' # 'absent'
+chrome_apt_key_state     : '{{ chrome_state }}' # 'present' # 'absent'
+chrome_apt_repo_location : 'sources_list_d'     # sources_list # location of apt_sources entry
+
+# packages and plugins
+
+chrome_apt_packages         : 'google-chrome-stable'
+
+# key_ids
+
+chrome_google_linux_package_signing_key_id       : '7FAC5991'
+chrome_google_linux_package_signing_authority_id : 'D38B4796'
+
+# key and entry
+
 chrome_source_signing_key   : 'https://dl-ssl.google.com/linux/linux_signing_key.pub'
 chrome_apt_source_entry     : 'deb [arch=amd64] https://dl.google.com/linux/chrome/deb/ stable main'
-chrome_apt_packages         : 'google-chrome-stable'
 chrome_sources_list_d_entry : 'https_dl_google_com_google-chrome'  # .list is appended by the module
-
-# stale repo options, not implemented at this time
-chrome_stale_remove               : False # Used to remove stale (old) chrome entries should be removed.
-chrome_stale_state                : 'purged' # 'absent' # 'present'
-chrome_stale_apt_source_entry     : 'deb [arch=amd64] https://dl.google.com/linux/chrome/deb/ stable main'
-chrome_stale_sources_list_d_entry : 'null'
 ```
 
 
@@ -64,7 +70,22 @@ Including an example of how to use your role (for instance, with variables passe
 ```yaml
     - hosts: chrome
       roles:
-         - { role: cjsteel.ansible-role-chrome, x: 42 }
+         - { role: cjsteel.ansible-role-chrome, chrome_state: 'present' }
+```
+
+
+
+## Role Testing
+
+### Locally using vagrant
+
+```shell
+mkdir .vagrant/synced
+vagrant up
+vagrant ssh -- -X
+google-chrome-stable
+exit
+vagrant destroy
 ```
 
 

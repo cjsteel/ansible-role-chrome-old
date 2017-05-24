@@ -7,37 +7,57 @@
 # apt tasks file for ansible-role-chrome
 # via http://linuxg.net/how-to-install-google-chrome-42-stable-on-the-most-popular-linux-systems-via-the-official-google-repository/
 
-- name: install apt signing key
-  apt_key: >
-    url: 'https://dl.google.com/linux/linux_signing_key.pub'
-    state='{{ chrome_apt_key_state }}'
+- name: "ensure for the google-chrome-browser apt signing key"
+  become: True
+  apt_key:
+    url: '{{ chrome_source_signing_key }}'
+    state: 'present'
+  tags: [ 'packages', 'chrome' ]
+  when: chrome_apt_key_state == 'present'
 
-- name: 'ensure for chrome_stale repository state'
+- name: "ensure for google-chrome debian repository listing in sources_list_d"
+  become: True
   apt_repository:
     mode: 0644
-    repo: '{{ chrome_stale_apt_source_entry }}'
-    state: '{{ chrome_stale_state }}'
-    filename: '{{ chrome_sources_list_d_entry }}' # .list is appended by the module
-    update_cache: yes
-  when: chrome_stale_remove == True
-
-- name: 'ensure for google-chrome debian repository'
-  apt_repository:
-    mode: 0644
-    repo: '{{ chrome_stale_apt_source_entry }}'
+    repo: '{{ chrome_apt_source_entry }}'
     state: '{{ chrome_state }}'
     filename: '{{ chrome_sources_list_d_entry }}' # .list is appended by the module
     update_cache: yes
-  register: google_repo
+  register: chrome_apt_source_state
+  when: chrome_apt_repo_location == 'sources_list_d'
+  tags: [ 'packages', 'chrome' ]
 
 - name: "apt | update cache"
-  apt: update_cache=yes
-  when: google_repo.changed
+  become: True
+  apt: 
+    update_cache: True
+  when: chrome_apt_source_state.changed
+  tags: [ 'packages', 'chrome' ]
 
 - name: "Install (or remove) chrome apt package(s)"
-  apt: >
-    name='{{ item }}'
-    state='{{ fsl_state }}'
+  become: True
+  apt:
+    name : '{{ item }}'
+    state: '{{ chrome_state }}'
   with_flattened:
     - '{{ chrome_apt_packages }}'
-        tags: [ 'packages', 'utilities' ]
+  tags: [ 'packages', 'chrome' ]
+
+- name: "remove Google Linux Package Signing Key when chrome_apt_key_state == 'absent'"
+  become: True
+  apt_key:
+    url: '{{ chrome_source_signing_key }}'
+    id : '{{ chrome_google_linux_package_signing_key_id }}'
+    state: '{{ chrome_apt_key_state }}'
+  when: chrome_apt_key_state == 'absent'
+  tags: [ 'packages', 'chrome' ]
+
+- name: "remove Google Linux Packages Signing Authority when chrome_apt_key_state == 'absent'"
+  become: True
+  apt_key:
+    url: '{{ chrome_source_signing_key }}'
+    id : '{{ chrome_google_linux_package_signing_authority_id }}'
+    state: '{{ chrome_apt_key_state }}'
+  when: chrome_apt_key_state == 'absent'
+  tags: [ 'packages', 'chrome' ]
+
