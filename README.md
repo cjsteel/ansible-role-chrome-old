@@ -1,8 +1,8 @@
 
-ansible-role-chrome
+ansible-role-apt_install
 =======================
 
-An Ansible role to install and manage chrome browser installations.
+An Ansible role to install and manage apt_install browser installations.
 
 
 Requirements
@@ -29,30 +29,30 @@ Issues
 Role Variables
 --------------
 
-### roles/chrome/defaults/main.yml
+### roles/apt_install/defaults/main.yml
 
 ```yaml
 ---
-# defaults file for ansible-role-chrome
+# defaults file for ansible-role-apt_install
 
-chrome_state             : 'present'            # 'present' # 'absent'
-chrome_apt_key_state     : '{{ chrome_state }}' # 'present' # 'absent'
-chrome_apt_repo_location : 'sources_list_d'     # sources_list # location of apt_sources entry
+apt_install_state             : 'present'            # 'present' # 'absent'
+apt_install_apt_key_state     : '{{ apt_install_state }}' # 'present' # 'absent'
+apt_install_apt_repo_location : 'sources_list_d'     # sources_list # location of apt_sources entry
 
 # packages and plugins
 
-chrome_apt_packages         : 'google-chrome-stable'
+apt_install_apt_packages         : 'google-apt_install-stable'
 
 # key_ids
 
-chrome_google_linux_package_signing_key_id       : '7FAC5991'
-chrome_google_linux_package_signing_authority_id : 'D38B4796'
+apt_install_google_linux_package_signing_key_id       : '7FAC5991'
+apt_install_google_linux_package_signing_authority_id : 'D38B4796'
 
 # key and entry
 
-chrome_source_signing_key   : 'https://dl-ssl.google.com/linux/linux_signing_key.pub'
-chrome_apt_source_entry     : 'deb [arch=amd64] https://dl.google.com/linux/chrome/deb/ stable main'
-chrome_sources_list_d_entry : 'https_dl_google_com_google-chrome'  # .list is appended by the module
+apt_install_source_signing_key   : 'https://dl-ssl.google.com/linux/linux_signing_key.pub'
+apt_install_apt_source_entry     : 'deb [arch=amd64] https://dl.google.com/linux/apt_install/deb/ stable main'
+apt_install_sources_list_d_entry : 'https_dl_google_com_google-apt_install'  # .list is appended by the module
 ```
 
 
@@ -68,9 +68,9 @@ Example Playbook
 Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
 
 ```yaml
-    - hosts: chrome
+    - hosts: apt_install
       roles:
-         - { role: cjsteel.ansible-role-chrome, chrome_state: 'present' }
+         - { role: cjsteel.ansible-role-apt_install, apt_install_state: 'present' }
 ```
 
 
@@ -83,7 +83,7 @@ Including an example of how to use your role (for instance, with variables passe
 mkdir .vagrant/synced
 vagrant up
 vagrant ssh -- -X
-google-chrome-stable
+google-apt_install-stable
 exit
 vagrant destroy
 ```
