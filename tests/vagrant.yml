@@ -1,5 +1,5 @@
 ---
-# file: roles/apt_install/tests/vagrant.yml
+# file: roles/chrome/tests/vagrant.yml
 
 - hosts: all
   remote_user: ubuntu
@@ -14,28 +14,28 @@
 
   vars:
 
-    - apt_install_remote_user : 'ubuntu'
+    - chrome_remote_user : 'ubuntu'
 
 # state and repo location
 
-    - apt_install_state             : 'present'                  # 'absent'
-    - apt_install_apt_key_state     : '{{ apt_install_state }}' # 'present' # 'absent'
-    - apt_install_apt_repo_location : 'sources_list_d'          # sources_list # location of apt_sources entry
+    - chrome_state             : 'absent'            # 'absent'
+    - chrome_apt_key_state     : '{{ chrome_state }}' # 'present' # 'absent'
+    - chrome_apt_repo_location : 'sources_list_d'     # sources_list # location of apt_sources entry
 
 # packages and plugins
 
-    - apt_install_apt_packages : 'google-chrome-stable'
+    - chrome_apt_packages : 'google-chrome-stable'
 
 # key_ids
 
-    - apt_install_google_linux_package_signing_key_id       : '7FAC5991'
-    - apt_install_google_linux_package_signing_authority_id : 'D38B4796'
+    - chrome_google_linux_package_signing_key_id       : '7FAC5991'
+    - chrome_google_linux_package_signing_authority_id : 'D38B4796'
 
 # key and entry
 
-    - apt_install_source_signing_key   : 'https://dl-ssl.google.com/linux/linux_signing_key.pub'
-    - apt_install_apt_source_entry     : 'deb [arch=amd64] https://dl.google.com/linux/chrome/deb/ stable main'
-    - apt_install_sources_list_d_entry : 'https_dl_google_com_google-chrome'  # .list is appended by the module
+    - chrome_source_signing_key   : 'https://dl-ssl.google.com/linux/linux_signing_key.pub'
+    - chrome_apt_source_entry     : 'deb [arch=amd64] https://dl.google.com/linux/chrome/deb/ stable main'
+    - chrome_sources_list_d_entry : 'https_dl_google_com_google-chrome'  # .list is appended by the module
 
   roles:
     - ../../

@@ -1,74 +1,63 @@
 ---
-# tasks file for ansible-role-apt_install
+# tasks file for ansible-role-chrome
 
 #- include: apt-installation.yml
 #  when: ansible_pkg_mgr == 'apt'
 
-# apt tasks file for ansible-role-apt_install
-# via http://linuxg.net/how-to-install-google-apt_install-42-stable-on-the-most-popular-linux-systems-via-the-official-google-repository/
+# apt tasks file for ansible-role-chrome
+# via http://linuxg.net/how-to-install-google-chrome-42-stable-on-the-most-popular-linux-systems-via-the-official-google-repository/
 
-# install any requirements
-
-- name: "apt-install - Ensure we have apt-transport-https"
-  become: True
-  apt:
-    name: 'apt-transport-https'
-    state: '{{ apt_install_apt_packages_state }}'
-
-
-# ensure our target repository apt signing key is installed
-
-- name: "ensure for the google-apt_install-browser apt signing key"
+- name: "ensure for the google-chrome-browser apt signing key"
   become: True
   apt_key:
-    url: '{{ apt_install_source_signing_key }}'
+    url: '{{ chrome_source_signing_key }}'
     state: 'present'
-  tags: [ 'packages', 'apt_install' ]
-  when: apt_install_apt_key_state == 'present'
+  tags: [ 'packages', 'chrome' ]
+  when: chrome_apt_key_state == 'present'
 
-- name: "ensure for google-apt_install debian repository listing in sources_list_d"
+- name: "ensure for google-chrome debian repository listing in sources_list_d"
   become: True
   apt_repository:
     mode: 0644
-    repo: '{{ apt_install_apt_source_entry }}'
-    state: '{{ apt_install_state }}'
-    filename: '{{ apt_install_sources_list_d_entry }}' # .list is appended by the module
+    repo: '{{ chrome_apt_source_entry }}'
+    state: '{{ chrome_state }}'
+    filename: '{{ chrome_sources_list_d_entry }}' # .list is appended by the module
     update_cache: yes
-  register: apt_install_apt_source_state
-  when: apt_install_apt_repo_location == 'sources_list_d'
-  tags: [ 'packages', 'apt_install' ]
+  register: chrome_apt_source_state
+  when: chrome_apt_repo_location == 'sources_list_d'
+  tags: [ 'packages', 'chrome' ]
 
 - name: "apt | update cache"
   become: True
   apt: 
     update_cache: True
-  when: apt_install_apt_source_state.changed
-  tags: [ 'packages', 'apt_install' ]
+  when: chrome_apt_source_state.changed
+  tags: [ 'packages', 'chrome' ]
 
-- name: "Install (or remove) apt_install apt package(s)"
+- name: "Install (or remove) chrome apt package(s)"
   become: True
   apt:
     name : '{{ item }}'
-    state: '{{ apt_install_state }}'
+    state: '{{ chrome_state }}'
   with_flattened:
-    - '{{ apt_install_apt_packages }}'
-  tags: [ 'packages', 'apt_install' ]
+    - '{{ chrome_apt_packages }}'
+  tags: [ 'packages', 'chrome' ]
 
-- name: "remove Google Linux Package Signing Key when apt_install_apt_key_state == 'absent'"
+- name: "remove Google Linux Package Signing Key when chrome_apt_key_state == 'absent'"
   become: True
   apt_key:
-    url: '{{ apt_install_source_signing_key }}'
-    id : '{{ apt_install_google_linux_package_signing_key_id }}'
-    state: '{{ apt_install_apt_key_state }}'
-  when: apt_install_apt_key_state == 'absent'
-  tags: [ 'packages', 'apt_install' ]
+    url: '{{ chrome_source_signing_key }}'
+    id : '{{ chrome_google_linux_package_signing_key_id }}'
+    state: '{{ chrome_apt_key_state }}'
+  when: chrome_apt_key_state == 'absent'
+  tags: [ 'packages', 'chrome' ]
 
-- name: "remove Google Linux Packages Signing Authority when apt_install_apt_key_state == 'absent'"
+- name: "remove Google Linux Packages Signing Authority when chrome_apt_key_state == 'absent'"
   become: True
   apt_key:
-    url: '{{ apt_install_source_signing_key }}'
-    id : '{{ apt_install_google_linux_package_signing_authority_id }}'
-    state: '{{ apt_install_apt_key_state }}'
-  when: apt_install_apt_key_state == 'absent'
-  tags: [ 'packages', 'apt_install' ]
+    url: '{{ chrome_source_signing_key }}'
+    id : '{{ chrome_google_linux_package_signing_authority_id }}'
+    state: '{{ chrome_apt_key_state }}'
+  when: chrome_apt_key_state == 'absent'
+  tags: [ 'packages', 'chrome' ]
 
