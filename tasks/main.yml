@@ -61,3 +61,12 @@
   when: chrome_apt_key_state == 'absent'
   tags: [ 'packages', 'chrome' ]
 
+#### Browser plugins
+
+#- name: Install browser plugins
+#  apt: name={{ item }} state=present
+#  with_items:
+#    - icedtea-plugin
+#  tags: [ 'packages', 'browsers_plugins' ]
+
+
