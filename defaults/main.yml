@@ -17,5 +17,8 @@ chrome_google_linux_package_signing_authority_id : 'D38B4796'
 # key and entry
 
 chrome_source_signing_key   : 'https://dl-ssl.google.com/linux/linux_signing_key.pub'
-chrome_apt_source_entry     : 'deb [arch=amd64] https://dl.google.com/linux/chrome/deb/ stable main'
-chrome_sources_list_d_entry : 'https_dl_google_com_google-chrome'  # .list is appended by the module
+chrome_apt_source_entry     : 'deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main'
+#chrome_apt_source_entry     : 'deb [arch=amd64] https://dl.google.com/linux/chrome/deb/ stable main'
+chrome_sources_list_d_entry : 'google-chrome'  # .list is appended by the module
+chrome_sources_list_d_entry_depreciated : 'https_dl_google_com_google-chrome'  # .list is appended by the module
+
