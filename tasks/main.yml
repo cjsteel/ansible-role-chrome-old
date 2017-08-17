@@ -17,15 +17,11 @@
 
 - name: "remove depreciated google-chrome debian repository listing in sources_list_d"
   become: True
-  apt_repository:
-    mode: 0644
-    repo: '{{ chrome_apt_source_entry }}'
+  file:
+    path: '/etc/apt/sources.list.d/https_dl_google_com_google-chrome.list'
     state: 'absent'
-    filename: '{{ chrome_sources_list_d_entry_depreciated }}' # .list is appended by the module
-    update_cache: yes
-  register: chrome_apt_source_state
-  when: chrome_apt_repo_location == 'sources_list_d'
   tags: [ 'packages', 'chrome' ]
+
 
 - name: "ensure for google-chrome debian repository listing in sources_list_d"
   become: True
@@ -72,13 +68,4 @@
     state: '{{ chrome_apt_key_state }}'
   when: chrome_apt_key_state == 'absent'
   tags: [ 'packages', 'chrome' ]
-
-#### Browser plugins
-
-#- name: Install browser plugins
-#  apt: name={{ item }} state=present
-#  with_items:
-#    - icedtea-plugin
-#  tags: [ 'packages', 'browsers_plugins' ]
-
 

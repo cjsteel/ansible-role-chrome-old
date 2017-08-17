@@ -18,7 +18,7 @@
 
 # state and repo location
 
-    - chrome_state             : 'present'            # 'absent'
+    - chrome_state             : 'absent'            # 'absent'
     - chrome_apt_key_state     : '{{ chrome_state }}' # 'present' # 'absent'
     - chrome_apt_repo_location : 'sources_list_d'     # sources_list # location of apt_sources entry
 
